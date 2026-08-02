@@ -1,0 +1,24 @@
+[Unit]
+Description=skillguard indexer — crawl GitHub for claude-plugin-guarded repos
+Documentation=https://github.com/JordanNewell/skillguard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=openclaw
+WorkingDirectory=/opt/skillguard
+EnvironmentFile=/opt/skillguard/.env
+ExecStart=/usr/bin/node /opt/skillguard/dist/indexer/index.js
+StandardOutput=append:/var/log/skillguard/indexer.log
+StandardError=append:/var/log/skillguard/indexer.log
+
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/log/skillguard /opt/skillguard/dist
+PrivateTmp=true
+
+Restart=no
+
+[Install]
+WantedBy=multi-user.target

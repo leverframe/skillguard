@@ -1,0 +1,11 @@
+[Unit]
+Description=Run skillguard-indexer every 24h
+Requires=skillguard-indexer.service
+
+[Timer]
+OnCalendar=*-*-* 04:00:00
+Persistent=true
+RandomizedDelaySec=30min
+
+[Install]
+WantedBy=timers.target
