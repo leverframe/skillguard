@@ -1,0 +1,14 @@
+[
+  {
+    "sha": "abc123",
+    "commit": { "message": "feat: x" },
+    "author": { "login": "jane-dev" },
+    "verification": { "verified": true, "reason": "valid" }
+  },
+  {
+    "sha": "def456",
+    "commit": { "message": "fix: y" },
+    "author": { "login": "jane-dev" },
+    "verification": { "verified": false, "reason": "unsigned" }
+  }
+]
