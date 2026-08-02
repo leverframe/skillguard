@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "type": "module",
   "bin": {
-    "skillguard": "./dist/cli/index.js"
+    "skillguard": "./dist/cli/index.js",
+    "skillguard-indexer": "./dist/indexer/index.js"
   },
   "scripts": {
     "build": "tsc",
