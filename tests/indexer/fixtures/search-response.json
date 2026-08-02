@@ -1,0 +1,16 @@
+{
+  "total_count": 2,
+  "incomplete_results": false,
+  "items": [
+    {
+      "full_name": "jane-dev/supercoder-skills",
+      "html_url": "https://github.com/jane-dev/supercoder-skills",
+      "owner": { "login": "jane-dev" }
+    },
+    {
+      "full_name": "JordanNewell/skillguard-self",
+      "html_url": "https://github.com/JordanNewell/skillguard-self",
+      "owner": { "login": "JordanNewell" }
+    }
+  ]
+}
