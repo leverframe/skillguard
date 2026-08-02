@@ -13,7 +13,10 @@ describe.skipIf(!minisignAvailable)('verifySignature', () => {
   });
 
   it('throws when signature is invalid', async () => {
-    await expect(verifySignature('/nonexistent', '/nonexistent', '/nonexistent'))
-      .rejects.toThrow();
+    await expect(verifySignature({
+      tarballPath: '/nonexistent',
+      sigPath: '/nonexistent',
+      publicKeyPath: '/nonexistent',
+    })).rejects.toThrow();
   });
 });
