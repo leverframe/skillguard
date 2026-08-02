@@ -1,0 +1,15 @@
+[plugin]
+name = "test-plugin"
+version = "0.1.0"
+description = "Fixture plugin for skillguard E2E tests"
+license = "MIT"
+homepage = "https://github.com/test/test-plugin"
+
+[author]
+handle = "test-author"
+github = "https://github.com/test"
+signing_key_url = "https://github.com/test/KEYS.txt"
+
+[compat]
+harnesses = ["claude-code"]
+min_cc_version = "6.13.0"
