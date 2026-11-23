@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/header.png" width="1280" alt="skillguard — signed plugin directory for Claude Code">
+  <img src="https://github.com/leverframe/skillguard/raw/main/assets/header.png" width="1280" alt="skillguard — signed plugin directory for Claude Code">
   <p>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-BUSL--1.1-FFB000?style=flat-square&labelColor=111213" alt="License: BUSL-1.1"></a>
   </p>
