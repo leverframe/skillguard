@@ -1,4 +1,11 @@
-# skillguard
+<div align="center">
+  <img src="assets/header.png" width="1280" alt="skillguard — signed plugin directory for Claude Code">
+  <p>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-BUSL--1.1-FFB000?style=flat-square&labelColor=111213" alt="License: BUSL-1.1"></a>
+  </p>
+</div>
+
+---
 
 A signed + transparent plugin directory for Claude Code. skillguard installs plugins from GitHub releases only after verifying a minisign signature against the repo's published `KEYS.txt`, shows you exactly what the plugin contains, and installs it atomically with versioned directories and an `active` symlink. A companion indexer crawls plugin repos nightly and produces a trust-annotated index (account age, signing-key age, signed-commit ratio).
 
