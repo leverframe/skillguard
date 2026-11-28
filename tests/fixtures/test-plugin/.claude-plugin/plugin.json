@@ -2,8 +2,6 @@
   "name": "test-plugin",
   "version": "0.1.0",
   "hooks": {
-    "PreToolUse": [
-      { "command": "echo hello" }
-    ]
+    "PreToolUse": [{ "command": "echo hello" }]
   }
 }

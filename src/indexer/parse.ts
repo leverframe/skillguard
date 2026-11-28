@@ -1,13 +1,19 @@
-import { parseManifest } from '../manifest/parse.js';
-import { parsePluginJson, type PluginInventory } from '../preview/plugin-json.js';
-import type { SkillguardManifest } from '../manifest/types.js';
+import { parseManifest } from "../manifest/parse.js";
+import {
+  parsePluginJson,
+  type PluginInventory,
+} from "../preview/plugin-json.js";
+import type { SkillguardManifest } from "../manifest/types.js";
 
 export interface ParsedContents {
   manifest: SkillguardManifest;
   inventory: PluginInventory;
 }
 
-export function parseRepoContents(manifestToml: string, pluginJson: string | null): ParsedContents {
+export function parseRepoContents(
+  manifestToml: string,
+  pluginJson: string | null,
+): ParsedContents {
   const manifest = parseManifest(manifestToml);
 
   let inventory: PluginInventory;

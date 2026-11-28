@@ -30,12 +30,12 @@ npm run build
 
 Environment variables:
 
-| Variable | Purpose |
-|----------|---------|
-| `GITHUB_TOKEN` | PAT with public-repo read. Optional for the CLI; the indexer needs it (anonymous rate limit is 10 req/hr). |
-| `SKILLGUARD_PLUGINS_ROOT` | Override install root (default `~/.claude/plugins`). |
-| `SKILLGUARD_ACTIVE_DIR` | Override the active-symlink dir (default `~/.claude/plugins/active`). |
-| `SKILLGUARD_INDEX_OUTPUT` | Override indexer output path (default `dist/index.json`). |
+| Variable                  | Purpose                                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `GITHUB_TOKEN`            | PAT with public-repo read. Optional for the CLI; the indexer needs it (anonymous rate limit is 10 req/hr). |
+| `SKILLGUARD_PLUGINS_ROOT` | Override install root (default `~/.claude/plugins`).                                                       |
+| `SKILLGUARD_ACTIVE_DIR`   | Override the active-symlink dir (default `~/.claude/plugins/active`).                                      |
+| `SKILLGUARD_INDEX_OUTPUT` | Override indexer output path (default `dist/index.json`).                                                  |
 
 ## Usage
 

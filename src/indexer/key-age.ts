@@ -1,7 +1,7 @@
-import { githubGet } from './github-client.js';
-import type { RepoCoords } from '../fetch/github.js';
+import { githubGet } from "./github-client.js";
+import type { RepoCoords } from "../fetch/github.js";
 
-const GITHUB_API = 'https://api.github.com';
+const GITHUB_API = "https://api.github.com";
 
 const MAX_PAGES = 10;
 const PER_PAGE = 100;
@@ -26,7 +26,10 @@ export async function getKeyAgeDays(
   return Math.floor(ms / (1000 * 60 * 60 * 24));
 }
 
-async function findEarliestKeyCommitDate(coords: RepoCoords, maxPages: number): Promise<Date | null> {
+async function findEarliestKeyCommitDate(
+  coords: RepoCoords,
+  maxPages: number,
+): Promise<Date | null> {
   let earliest: Date | null = null;
 
   for (let page = 1; page <= maxPages; page++) {
@@ -36,7 +39,7 @@ async function findEarliestKeyCommitDate(coords: RepoCoords, maxPages: number): 
       const { body } = await githubGet<CommitEntry[]>(url);
       commits = body;
     } catch (e) {
-      if ((e as Error).message.includes('404')) return earliest;
+      if ((e as Error).message.includes("404")) return earliest;
       throw e;
     }
     if (commits.length === 0) return earliest;

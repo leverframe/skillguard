@@ -1,10 +1,14 @@
-import { fetchLatestRelease, downloadToTemp, type RepoCoords } from '../fetch/github.js';
-import { verifySignature } from '../verify/minisign.js';
+import {
+  fetchLatestRelease,
+  downloadToTemp,
+  type RepoCoords,
+} from "../fetch/github.js";
+import { verifySignature } from "../verify/minisign.js";
 
 export class MissingReleaseAssetError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'MissingReleaseAssetError';
+    this.name = "MissingReleaseAssetError";
   }
 }
 
@@ -19,7 +23,9 @@ export interface ReleaseArtifacts {
   verified: boolean;
 }
 
-export async function fetchReleaseArtifacts(coords: RepoCoords): Promise<ReleaseArtifacts> {
+export async function fetchReleaseArtifacts(
+  coords: RepoCoords,
+): Promise<ReleaseArtifacts> {
   const token = process.env.GITHUB_TOKEN;
   const release = await fetchLatestRelease(coords, token);
 
@@ -40,7 +46,11 @@ export async function fetchReleaseArtifacts(coords: RepoCoords): Promise<Release
     downloadToTemp(release.keysAsset.url, token),
   ]);
 
-  const verified = await verifySignature({ tarballPath, sigPath, publicKeyPath: keysPath });
+  const verified = await verifySignature({
+    tarballPath,
+    sigPath,
+    publicKeyPath: keysPath,
+  });
 
   if (!verified) {
     throw new Error(
@@ -53,7 +63,9 @@ export async function fetchReleaseArtifacts(coords: RepoCoords): Promise<Release
     tarballUrl: release.tarballUrl,
     sigAssetUrl: release.sigAsset.url,
     keysAssetUrl: release.keysAsset.url,
-    tarballPath, sigPath, keysPath,
+    tarballPath,
+    sigPath,
+    keysPath,
     verified,
   };
 }

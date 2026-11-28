@@ -1,10 +1,10 @@
-import { crawlRepos } from './crawl.js';
-import { fetchReleaseArtifacts } from './fetch-release.js';
-import { extractFile, listDir } from './extract-tar-file.js';
-import { parseRepoContents } from './parse.js';
-import { computeTrustBadges } from './trust-badges.js';
-import { emitIndex } from './emit.js';
-import type { IndexEntry, FailedRepoEntry } from './types.js';
+import { crawlRepos } from "./crawl.js";
+import { fetchReleaseArtifacts } from "./fetch-release.js";
+import { extractFile, listDir } from "./extract-tar-file.js";
+import { parseRepoContents } from "./parse.js";
+import { computeTrustBadges } from "./trust-badges.js";
+import { emitIndex } from "./emit.js";
+import type { IndexEntry, FailedRepoEntry } from "./types.js";
 
 export interface PipelineOptions {
   outputPath?: string;
@@ -17,7 +17,9 @@ export interface PipelineResult {
   emittedPath?: string;
 }
 
-export async function runPipeline(opts: PipelineOptions = {}): Promise<PipelineResult> {
+export async function runPipeline(
+  opts: PipelineOptions = {},
+): Promise<PipelineResult> {
   const repos = await crawlRepos();
   const limited = opts.crawlLimit ? repos.slice(0, opts.crawlLimit) : repos;
 
@@ -30,16 +32,27 @@ export async function runPipeline(opts: PipelineOptions = {}): Promise<PipelineR
     try {
       const release = await fetchReleaseArtifacts(coords);
 
-      const manifestToml = await extractFile(release.tarballPath, 'skillguard.toml');
+      const manifestToml = await extractFile(
+        release.tarballPath,
+        "skillguard.toml",
+      );
       let pluginJson: string | null = null;
       try {
-        pluginJson = await extractFile(release.tarballPath, '.claude-plugin/plugin.json');
+        pluginJson = await extractFile(
+          release.tarballPath,
+          ".claude-plugin/plugin.json",
+        );
       } catch {
         // plugin.json optional
       }
 
-      const { manifest, inventory } = parseRepoContents(manifestToml, pluginJson);
-      const skills = await listDir(release.tarballPath, 'skills/').catch(() => [] as string[]);
+      const { manifest, inventory } = parseRepoContents(
+        manifestToml,
+        pluginJson,
+      );
+      const skills = await listDir(release.tarballPath, "skills/").catch(
+        () => [] as string[],
+      );
 
       const trustBadges = await computeTrustBadges(coords);
 
@@ -62,8 +75,14 @@ export async function runPipeline(opts: PipelineOptions = {}): Promise<PipelineR
         harnesses: manifest.compat.harnesses,
         inventory: {
           skills,
-          hooks: inventory.hooks.map(h => ({ event: h.event, command: h.command })),
-          mcpServers: inventory.mcpServers.map(m => ({ name: m.name, command: m.command })),
+          hooks: inventory.hooks.map((h) => ({
+            event: h.event,
+            command: h.command,
+          })),
+          mcpServers: inventory.mcpServers.map((m) => ({
+            name: m.name,
+            command: m.command,
+          })),
         },
         lastIndexed: now,
       };
@@ -71,7 +90,11 @@ export async function runPipeline(opts: PipelineOptions = {}): Promise<PipelineR
       entries.push(entry);
     } catch (e) {
       const reason = (e as Error).message ?? String(e);
-      failed.push({ repo: { owner: coords.owner, repo: coords.repo, url }, reason, at: now });
+      failed.push({
+        repo: { owner: coords.owner, repo: coords.repo, url },
+        reason,
+        at: now,
+      });
     }
   }
 

@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { parseManifest } from './parse.js';
+import { describe, it, expect } from "vitest";
+import { parseManifest } from "./parse.js";
 
-describe('parseManifest', () => {
+describe("parseManifest", () => {
   const validToml = `
 [plugin]
 name = "supercoder-skills"
@@ -23,21 +23,21 @@ min_cc_version = "6.13.0"
 seeking_review = true
 `;
 
-  it('parses a valid manifest', () => {
+  it("parses a valid manifest", () => {
     const result = parseManifest(validToml);
-    expect(result.plugin.name).toBe('supercoder-skills');
-    expect(result.plugin.version).toBe('1.2.0');
-    expect(result.author.handle).toBe('jane-dev');
-    expect(result.compat.harnesses).toEqual(['claude-code']);
+    expect(result.plugin.name).toBe("supercoder-skills");
+    expect(result.plugin.version).toBe("1.2.0");
+    expect(result.author.handle).toBe("jane-dev");
+    expect(result.compat.harnesses).toEqual(["claude-code"]);
     expect(result.trust?.seeking_review).toBe(true);
   });
 
-  it('throws on missing required fields', () => {
+  it("throws on missing required fields", () => {
     const bad = `[plugin]\nname = "x"`;
     expect(() => parseManifest(bad)).toThrow(/missing required/i);
   });
 
-  it('throws on invalid TOML', () => {
-    expect(() => parseManifest('this is not = valid = toml')).toThrow();
+  it("throws on invalid TOML", () => {
+    expect(() => parseManifest("this is not = valid = toml")).toThrow();
   });
 });

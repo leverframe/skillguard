@@ -1,6 +1,6 @@
-import { githubGet } from './github-client.js';
+import { githubGet } from "./github-client.js";
 
-const GITHUB_API = 'https://api.github.com';
+const GITHUB_API = "https://api.github.com";
 
 interface CommitEntry {
   sha: string;
@@ -22,7 +22,10 @@ export interface CountOptions {
   maxRepos?: number;
 }
 
-export async function countSignedCommitsForUser(handle: string, opts: CountOptions = {}): Promise<number> {
+export async function countSignedCommitsForUser(
+  handle: string,
+  opts: CountOptions = {},
+): Promise<number> {
   const perPage = opts.perPage ?? 100;
   const maxPages = opts.maxPages ?? 10;
   const maxRepos = opts.maxRepos ?? 10;
@@ -47,7 +50,9 @@ export async function countSignedCommitsForUser(handle: string, opts: CountOptio
       }
 
       if (commits.length === 0) break;
-      totalSigned += commits.filter(c => c.verification?.verified === true).length;
+      totalSigned += commits.filter(
+        (c) => c.verification?.verified === true,
+      ).length;
       pagesConsumed++;
 
       if (commits.length < perPage) break;

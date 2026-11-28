@@ -45,7 +45,7 @@ export function parsePluginJson(json: string): PluginInventory {
   }
 
   if (!parsed.name || !parsed.version) {
-    throw new Error('invalid plugin.json: missing name or version');
+    throw new Error("invalid plugin.json: missing name or version");
   }
 
   const hooks: PluginHook[] = [];
@@ -61,7 +61,12 @@ export function parsePluginJson(json: string): PluginInventory {
   const mcpServers: PluginMcp[] = [];
   if (parsed.mcpServers) {
     for (const [name, cfg] of Object.entries(parsed.mcpServers)) {
-      mcpServers.push({ name, command: cfg.command, args: cfg.args, env: cfg.env });
+      mcpServers.push({
+        name,
+        command: cfg.command,
+        args: cfg.args,
+        env: cfg.env,
+      });
     }
   }
 

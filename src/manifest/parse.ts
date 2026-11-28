@@ -1,17 +1,38 @@
-import TOML from '@iarna/toml';
-import type { SkillguardManifest, PluginSection, AuthorSection, CompatSection } from './types.js';
+import TOML from "@iarna/toml";
+import type {
+  SkillguardManifest,
+  PluginSection,
+  AuthorSection,
+  CompatSection,
+} from "./types.js";
 
-const REQUIRED_PLUGIN_FIELDS: (keyof PluginSection)[] = ['name', 'version', 'description', 'license', 'homepage'];
-const REQUIRED_AUTHOR_FIELDS: (keyof AuthorSection)[] = ['handle', 'github', 'signing_key_url'];
-const REQUIRED_COMPAT_FIELDS: (keyof CompatSection)[] = ['harnesses'];
+const REQUIRED_PLUGIN_FIELDS: (keyof PluginSection)[] = [
+  "name",
+  "version",
+  "description",
+  "license",
+  "homepage",
+];
+const REQUIRED_AUTHOR_FIELDS: (keyof AuthorSection)[] = [
+  "handle",
+  "github",
+  "signing_key_url",
+];
+const REQUIRED_COMPAT_FIELDS: (keyof CompatSection)[] = ["harnesses"];
 
-function validate<T extends object>(section: unknown, fields: (keyof T)[], sectionName: string): T {
-  if (!section || typeof section !== 'object') {
+function validate<T extends object>(
+  section: unknown,
+  fields: (keyof T)[],
+  sectionName: string,
+): T {
+  if (!section || typeof section !== "object") {
     throw new Error(`manifest: missing required [${sectionName}] section`);
   }
   for (const f of fields) {
     if (!(f in (section as object))) {
-      throw new Error(`manifest: missing required field [${sectionName}].${String(f)}`);
+      throw new Error(
+        `manifest: missing required field [${sectionName}].${String(f)}`,
+      );
     }
   }
   return section as T;
@@ -26,12 +47,24 @@ export function parseManifest(toml: string): SkillguardManifest {
   }
 
   const obj = parsed as Partial<SkillguardManifest>;
-  const plugin = validate<PluginSection>(obj.plugin, REQUIRED_PLUGIN_FIELDS, 'plugin');
-  const author = validate<AuthorSection>(obj.author, REQUIRED_AUTHOR_FIELDS, 'author');
-  const compat = validate<CompatSection>(obj.compat, REQUIRED_COMPAT_FIELDS, 'compat');
+  const plugin = validate<PluginSection>(
+    obj.plugin,
+    REQUIRED_PLUGIN_FIELDS,
+    "plugin",
+  );
+  const author = validate<AuthorSection>(
+    obj.author,
+    REQUIRED_AUTHOR_FIELDS,
+    "author",
+  );
+  const compat = validate<CompatSection>(
+    obj.compat,
+    REQUIRED_COMPAT_FIELDS,
+    "compat",
+  );
 
   if (!Array.isArray(compat.harnesses) || compat.harnesses.length === 0) {
-    throw new Error('manifest: [compat].harnesses must be a non-empty array');
+    throw new Error("manifest: [compat].harnesses must be a non-empty array");
   }
 
   return { plugin, author, compat, trust: obj.trust };

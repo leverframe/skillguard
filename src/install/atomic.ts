@@ -1,6 +1,6 @@
-import { mkdir, rm, rename, stat } from 'node:fs/promises';
-import { dirname } from 'node:path';
-import { extract } from 'tar';
+import { mkdir, rm, rename, stat } from "node:fs/promises";
+import { dirname } from "node:path";
+import { extract } from "tar";
 
 export interface AtomicInstallOptions {
   overwrite?: boolean;
@@ -18,7 +18,7 @@ export async function atomicInstall(
       await stat(destDir);
       throw new Error(`destination already exists: ${destDir}`);
     } catch (e) {
-      if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
+      if ((e as NodeJS.ErrnoException).code !== "ENOENT") throw e;
     }
   }
 

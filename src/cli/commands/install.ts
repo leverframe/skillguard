@@ -1,25 +1,35 @@
-import { readFile, mkdir, readdir } from 'node:fs/promises';
-import { join } from 'node:path';
-import { homedir } from 'node:os';
-import { extract } from 'tar';
-import { parseRepoUrl, fetchLatestRelease, downloadToTemp } from '../../fetch/github.js';
-import { verifySignature } from '../../verify/minisign.js';
-import { parseManifest } from '../../manifest/parse.js';
-import { parsePluginJson } from '../../preview/plugin-json.js';
-import { renderPreview } from '../../preview/render.js';
-import { confirmInstall } from '../../prompt/confirm.js';
-import { atomicInstall } from '../../install/atomic.js';
-import { linkActive } from '../../install/symlink.js';
+import { readFile, mkdir, readdir } from "node:fs/promises";
+import { join } from "node:path";
+import { homedir } from "node:os";
+import { extract } from "tar";
+import {
+  parseRepoUrl,
+  fetchLatestRelease,
+  downloadToTemp,
+} from "../../fetch/github.js";
+import { verifySignature } from "../../verify/minisign.js";
+import { parseManifest } from "../../manifest/parse.js";
+import { parsePluginJson } from "../../preview/plugin-json.js";
+import { renderPreview } from "../../preview/render.js";
+import { confirmInstall } from "../../prompt/confirm.js";
+import { atomicInstall } from "../../install/atomic.js";
+import { linkActive } from "../../install/symlink.js";
 
 export interface InstallOptions {
   dryRun: boolean;
   yes: boolean;
 }
 
-const PLUGINS_ROOT = process.env.SKILLGUARD_PLUGINS_ROOT ?? join(homedir(), '.claude', 'plugins');
-const ACTIVE_DIR = process.env.SKILLGUARD_ACTIVE_DIR ?? join(homedir(), '.claude', 'plugins', 'active');
+const PLUGINS_ROOT =
+  process.env.SKILLGUARD_PLUGINS_ROOT ?? join(homedir(), ".claude", "plugins");
+const ACTIVE_DIR =
+  process.env.SKILLGUARD_ACTIVE_DIR ??
+  join(homedir(), ".claude", "plugins", "active");
 
-export async function installCommand(repoUrl: string, opts: InstallOptions): Promise<void> {
+export async function installCommand(
+  repoUrl: string,
+  opts: InstallOptions,
+): Promise<void> {
   const coords = parseRepoUrl(repoUrl);
   if (!coords) {
     console.error(`Error: not a valid GitHub URL: ${repoUrl}`);
@@ -31,11 +41,15 @@ export async function installCommand(repoUrl: string, opts: InstallOptions): Pro
   const release = await fetchLatestRelease(coords, token);
 
   if (!release.sigAsset) {
-    console.error('Error: release has no .minisig asset. skillguard refuses unsigned plugins.');
+    console.error(
+      "Error: release has no .minisig asset. skillguard refuses unsigned plugins.",
+    );
     process.exit(1);
   }
   if (!release.keysAsset) {
-    console.error('Error: release has no KEYS.txt asset. Cannot verify signature.');
+    console.error(
+      "Error: release has no KEYS.txt asset. Cannot verify signature.",
+    );
     process.exit(1);
   }
 
@@ -44,17 +58,17 @@ export async function installCommand(repoUrl: string, opts: InstallOptions): Pro
   const sigPath = await downloadToTemp(release.sigAsset.url, token);
   const keysPath = await downloadToTemp(release.keysAsset.url, token);
 
-  console.log('Verifying minisign signature...');
+  console.log("Verifying minisign signature...");
   const verified = await verifySignature({
     tarballPath,
     sigPath,
     publicKeyPath: keysPath,
   });
   if (!verified) {
-    console.error('Error: signature verification failed. Refusing to install.');
+    console.error("Error: signature verification failed. Refusing to install.");
     process.exit(1);
   }
-  console.log('Signature verified.');
+  console.log("Signature verified.");
 
   const staging = `${tarballPath}.extracted`;
   await mkdir(staging, { recursive: true });
@@ -63,13 +77,16 @@ export async function installCommand(repoUrl: string, opts: InstallOptions): Pro
   let manifestText: string;
   let pluginJsonText: string | null = null;
   try {
-    manifestText = await readFile(join(staging, 'skillguard.toml'), 'utf-8');
+    manifestText = await readFile(join(staging, "skillguard.toml"), "utf-8");
   } catch {
-    console.error('Error: tarball missing skillguard.toml');
+    console.error("Error: tarball missing skillguard.toml");
     process.exit(1);
   }
   try {
-    pluginJsonText = await readFile(join(staging, '.claude-plugin', 'plugin.json'), 'utf-8');
+    pluginJsonText = await readFile(
+      join(staging, ".claude-plugin", "plugin.json"),
+      "utf-8",
+    );
   } catch {
     // plugin.json optional for skills-only plugins
   }
@@ -77,11 +94,16 @@ export async function installCommand(repoUrl: string, opts: InstallOptions): Pro
   const manifest = parseManifest(manifestText);
   const inventory = pluginJsonText
     ? parsePluginJson(pluginJsonText)
-    : { name: manifest.plugin.name, version: manifest.plugin.version, hooks: [], mcpServers: [] };
+    : {
+        name: manifest.plugin.name,
+        version: manifest.plugin.version,
+        hooks: [],
+        mcpServers: [],
+      };
 
   let skills: string[] = [];
   try {
-    skills = await readdir(join(staging, 'skills'));
+    skills = await readdir(join(staging, "skills"));
   } catch {
     skills = [];
   }
@@ -91,19 +113,23 @@ export async function installCommand(repoUrl: string, opts: InstallOptions): Pro
   console.log();
 
   if (opts.dryRun) {
-    console.log('--dry-run: not installing.');
+    console.log("--dry-run: not installing.");
     return;
   }
 
   if (!opts.yes) {
-    const ok = await confirmInstall('Install this plugin?');
+    const ok = await confirmInstall("Install this plugin?");
     if (!ok) {
-      console.log('Aborted.');
+      console.log("Aborted.");
       return;
     }
   }
 
-  const destDir = join(PLUGINS_ROOT, manifest.plugin.name, manifest.plugin.version);
+  const destDir = join(
+    PLUGINS_ROOT,
+    manifest.plugin.name,
+    manifest.plugin.version,
+  );
   console.log(`Installing to ${destDir}...`);
   await atomicInstall(tarballPath, destDir, { overwrite: true });
 

@@ -1,8 +1,8 @@
-import { githubGet } from './github-client.js';
-import type { RepoCoords } from '../fetch/github.js';
+import { githubGet } from "./github-client.js";
+import type { RepoCoords } from "../fetch/github.js";
 
-const SEARCH_URL = 'https://api.github.com/search/repositories';
-const TOPIC = 'claude-plugin-guarded';
+const SEARCH_URL = "https://api.github.com/search/repositories";
+const TOPIC = "claude-plugin-guarded";
 const MAX_PAGES = 10;
 
 export interface CrawlOptions {
@@ -21,7 +21,9 @@ interface SearchResponse {
   items: SearchItem[];
 }
 
-export async function crawlRepos(opts: CrawlOptions = {}): Promise<RepoCoords[]> {
+export async function crawlRepos(
+  opts: CrawlOptions = {},
+): Promise<RepoCoords[]> {
   const perPage = opts.perPage ?? 100;
   const maxPages = opts.maxPages ?? MAX_PAGES;
   const seen = new Set<string>();
@@ -40,7 +42,7 @@ export async function crawlRepos(opts: CrawlOptions = {}): Promise<RepoCoords[]>
       const key = item.full_name.toLowerCase();
       if (seen.has(key)) continue;
       seen.add(key);
-      const [owner, repo] = item.full_name.split('/');
+      const [owner, repo] = item.full_name.split("/");
       if (owner && repo) out.push({ owner, repo });
     }
 

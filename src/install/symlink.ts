@@ -1,5 +1,5 @@
-import { mkdir, symlink, readlink, lstat, rm } from 'node:fs/promises';
-import { join } from 'node:path';
+import { mkdir, symlink, readlink, lstat, rm } from "node:fs/promises";
+import { join } from "node:path";
 
 export interface LinkOptions {
   pluginsRoot: string;
@@ -26,10 +26,10 @@ export async function linkActive(opts: LinkOptions): Promise<void> {
       await rm(linkPath, { force: true });
     }
   } catch (e) {
-    if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
+    if ((e as NodeJS.ErrnoException).code !== "ENOENT") throw e;
   }
 
-  await symlink(target, linkPath, 'dir');
+  await symlink(target, linkPath, "dir");
 }
 
 export async function unlinkActive(opts: UnlinkOptions): Promise<void> {
@@ -40,6 +40,6 @@ export async function unlinkActive(opts: UnlinkOptions): Promise<void> {
       await rm(linkPath, { force: true });
     }
   } catch (e) {
-    if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
+    if ((e as NodeJS.ErrnoException).code !== "ENOENT") throw e;
   }
 }

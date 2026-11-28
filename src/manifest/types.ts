@@ -28,4 +28,8 @@ export interface TrustSection {
   seeking_review?: boolean;
 }
 
-export type TrustLevel = 'signed' | 'verified-author' | 'reviewed' | 'org-published';
+export type TrustLevel =
+  | "signed"
+  | "verified-author"
+  | "reviewed"
+  | "org-published";
